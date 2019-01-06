@@ -8,6 +8,6 @@ c:/_PROJECT/temp/
 
 Добавить файл  
 c:/_PROJECT/temp/config.properties
-> site.posts = ht__://www.___%s  
+> site.posts = ht__://w__.___%s  
 > site.posts.start.id = 800100
 
