@@ -68,6 +68,14 @@ public class ParsingPageAdv {
             box.saveStorage();
             return true;
         }
+
+        if (box.getStorageLastSuccessId() > box.getStorageCurrentId()){
+            box.setStorageCurrentId(box.getStorageCurrentId() + 2);
+            box.saveStorage();
+            log.info("setNewStart(): +2");
+            return false;
+        }
+
         log.info("setNewStart(): no new applications");
         return false;
     }
