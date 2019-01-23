@@ -26,7 +26,7 @@ public class ParsingPageAdv {
             return;
         }
 
-        if (box.size() > 100){
+        if (box.size() > 200){
             return;
         }
 
@@ -46,9 +46,13 @@ public class ParsingPageAdv {
                 }*/
 
                 if (advText.contains("ico_arrow")) {
-                    if (advText.contains("Москва") && !advText.contains("спонсорство")) {
+
+                    boolean isAllInclude = Config.WORDS_INCLUDE.stream().allMatch(advText::contains);
+                    boolean isAnyExclude = Config.WORDS_EXCLUDE.stream().anyMatch(advText::contains);
+                    if (isAllInclude && !isAnyExclude){
                         box.add(new Adv(id, advText, url));
                     }
+
                     box.setStorageLastSuccessId(id);
                     Config.SENT_ADV.add(id);
                 }
@@ -59,25 +63,29 @@ public class ParsingPageAdv {
         }
     }
 
-    public boolean setNewStart() {
+    public int setNewStart() {
         log.info("setNewStart():");
 
         long successId = box.getStorageLastSuccessId() - Config.COUNT_PAGES / 2;
         if (successId > box.getStorageCurrentId()){
             box.setStorageCurrentId(successId);
             box.saveStorage();
-            return true;
+            return Config.TIMEOUT_BATCH_SHORT;
         }
 
         if (box.getStorageLastSuccessId() > box.getStorageCurrentId()){
-            box.setStorageCurrentId(box.getStorageCurrentId() + 2);
+            final long currentIdBefore = box.getStorageCurrentId();
+            box.setStorageCurrentId(currentIdBefore + 2);
             box.saveStorage();
-            log.info("setNewStart(): +2");
-            return false;
+            log.info("setNewStart(): LastSuccessId={}, current={}->{}",
+                    box.getStorageLastSuccessId(),
+                    currentIdBefore,
+                    box.getStorageCurrentId());
+            return Config.TIMEOUT_BATCH_MEDIUM;
         }
 
         log.info("setNewStart(): no new applications");
-        return false;
+        return Config.TIMEOUT_BATCH_BIG;
     }
 
     private static String findAdvText(Element element) {

@@ -17,7 +17,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-import static ru.redandspring.model.Config.*;
+import static ru.redandspring.model.Config.TIMEOUT_EACH_ROW;
 
 public class Main {
 
@@ -50,8 +50,8 @@ public class Main {
                         parsingPageAdv.parsePosts(i);
                         Thread.sleep(TIMEOUT_EACH_ROW);
                     }
-                    boolean isSet = parsingPageAdv.setNewStart();
-                    Thread.sleep((isSet) ? TIMEOUT_BATCH : TIMEOUT_BATCH_LONG);
+                    final int sleepTime = parsingPageAdv.setNewStart();
+                    Thread.sleep(sleepTime);
                 } catch (InterruptedException e) {
                     log.error("App Interrupted", e);
                 } catch (ServiceException e) {
