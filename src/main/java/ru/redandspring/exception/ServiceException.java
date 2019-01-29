@@ -1,4 +1,4 @@
-package ru.redandspring.services;
+package ru.redandspring.exception;
 
 public class ServiceException extends Exception {
 

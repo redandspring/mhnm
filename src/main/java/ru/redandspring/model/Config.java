@@ -19,6 +19,8 @@ public class Config {
     public static final String HOME_TEMP = "c:/_PROJECT/temp/";
 
     public static String SITE_POSTS;
+    public static String SITE_POSTS_ELEMENT_CSS;
+    public static boolean SITE_POSTS_ELEMENT_IS_OUTER;
 
     public static final List<Long> SENT_ADV = new CopyOnWriteArrayList<>();
 
@@ -41,10 +43,15 @@ public class Config {
             if (StringUtils.trimToNull(SITE_POSTS) == null) {
                 throw new RuntimeException("site.posts is not exists");
             }
+            SITE_POSTS_ELEMENT_CSS = property.getProperty("site.posts.element.css");
+            if (StringUtils.trimToNull(SITE_POSTS_ELEMENT_CSS) == null) {
+                throw new RuntimeException("site.posts.element.css is not exists");
+            }
             START_ID = Long.parseLong(property.getProperty("site.posts.start.id"));
             if (START_ID < 800_000){
                 throw new RuntimeException("site.posts.start.id is wrong");
             }
+            SITE_POSTS_ELEMENT_IS_OUTER = Boolean.parseBoolean(property.getProperty("site.posts.element.outer.is", "false"));
             final boolean isFast = Boolean.parseBoolean(property.getProperty("site.posts.timeout.fast.is", "false"));
             final String prefixTimeoutProp = (isFast) ? "site.posts.timeout.fast." : "site.posts.timeout.slow.";
             TIMEOUT_EACH_ROW = propInt(property, prefixTimeoutProp + "row", "2") * 1000;

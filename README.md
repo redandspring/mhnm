@@ -11,6 +11,9 @@ c:/_PROJECT/temp/config.txt
 site.posts = ht__://w__.___%s  
 site.posts.start.id = 800100
 
+site.posts.element.css = table.example div p
+site.posts.element.outer.is = false
+
 site.posts.timeout.fast.is = false
 
 site.posts.timeout.fast.row = 2

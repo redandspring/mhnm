@@ -5,8 +5,8 @@ import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.redandspring.exception.ServiceException;
 import ru.redandspring.services.Box;
-import ru.redandspring.services.ServiceException;
 import ru.redandspring.services.StatisticPage;
 
 import javax.servlet.http.HttpServletRequest;

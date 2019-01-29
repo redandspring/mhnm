@@ -8,9 +8,9 @@ import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.util.resource.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.redandspring.exception.ServiceException;
 import ru.redandspring.model.Config;
 import ru.redandspring.services.ParsingPageAdv;
-import ru.redandspring.services.ServiceException;
 
 import java.net.MalformedURLException;
 import java.net.URI;

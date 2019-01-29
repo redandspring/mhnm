@@ -7,6 +7,8 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.redandspring.exception.NotFindElementException;
+import ru.redandspring.exception.ServiceException;
 import ru.redandspring.model.Adv;
 import ru.redandspring.model.Config;
 
@@ -40,24 +42,20 @@ public class ParsingPageAdv {
 
             final String advText = findAdvText(doc);
 
-            if (advText != null){
-                /*if (advText.contains("Такой страницы нет")){
-                    log.info("parsePosts(): i={}", i);
-                }*/
+            if (advText.contains("ico_arrow")) {
 
-                if (advText.contains("ico_arrow")) {
-
-                    boolean isAllInclude = Config.WORDS_INCLUDE.stream().allMatch(advText::contains);
-                    boolean isAnyExclude = Config.WORDS_EXCLUDE.stream().anyMatch(advText::contains);
-                    if (isAllInclude && !isAnyExclude){
-                        box.add(new Adv(id, advText, url));
-                    }
-
-                    box.setStorageLastSuccessId(id);
-                    Config.SENT_ADV.add(id);
+                boolean isAllInclude = Config.WORDS_INCLUDE.stream().allMatch(advText::contains);
+                boolean isAnyExclude = Config.WORDS_EXCLUDE.stream().anyMatch(advText::contains);
+                if (isAllInclude && !isAnyExclude){
+                    box.add(new Adv(id, advText, url));
                 }
+
+                box.setStorageLastSuccessId(id);
+                Config.SENT_ADV.add(id);
             }
 
+
+        } catch (NotFindElementException ignore) {
         } catch (IOException e) {
             throw new ServiceException("parsePosts(): get url is error", e);
         }
@@ -88,12 +86,14 @@ public class ParsingPageAdv {
         return Config.TIMEOUT_BATCH_BIG;
     }
 
-    private static String findAdvText(Element element) {
+    private static String findAdvText(Element element) throws NotFindElementException {
 
-        Elements finds = element.select("table.pagew tr td.pagew div table.t td");
+        Elements finds = element.select(Config.SITE_POSTS_ELEMENT_CSS);
         if (finds.size() > 0){
-            return finds.get(0).html();
+            final Element el = finds.get(0);
+            return (Config.SITE_POSTS_ELEMENT_IS_OUTER) ? el.outerHtml() : el.html();
         }
-        return null;
+
+        throw new NotFindElementException();
     }
 }
