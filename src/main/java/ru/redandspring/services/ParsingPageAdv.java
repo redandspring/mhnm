@@ -89,8 +89,8 @@ public class ParsingPageAdv {
     private static String findAdvText(Element element) throws NotFindElementException {
 
         Elements finds = element.select(Config.SITE_POSTS_ELEMENT_CSS);
-        if (finds.size() > 0){
-            final Element el = finds.get(0);
+        if (finds.size() > 1){
+            final Element el = finds.get(1);
             return (Config.SITE_POSTS_ELEMENT_IS_OUTER) ? el.outerHtml() : el.html();
         }
 
